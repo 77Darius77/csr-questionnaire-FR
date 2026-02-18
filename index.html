@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire RSE - LACME SAS</title>
+    <!-- Bootstrap pour le style -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 50px;
+        }
+
+        .form-container {
+            max-width: 770px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            overflow: hidden;
+            border-top: 10px solid #0056b3;
+        }
+
+        .header-image {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-image img {
+            max-width: 250px;
+            height: auto;
+        }
+
+        .form-section {
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            color: #202124;
+        }
+
+        .question-box {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .question-label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .required-star {
+            color: #d93025;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #fafafa;
+            border: 1px solid #dadce0;
+            border-bottom: 1px solid #70757a;
+            border-radius: 4px;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            box-shadow: none;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .btn-submit {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 24px;
+            font-weight: 500;
+            border-radius: 4px;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #004494;
+        }
+
+        .intro-text {
+            font-size: 14px;
+            color: #202124;
+            line-height: 1.5;
+        }
+
+        /* Thank You Page */
+        .thank-you-container {
+            display: none;
+            max-width: 770px;
+            margin: 60px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            overflow: hidden;
+            border-top: 10px solid #0056b3;
+            text-align: center;
+            padding: 50px 40px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .thank-you-container img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        .thank-you-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: scaleIn 0.5s ease-out 0.3s both;
+        }
+
+        .thank-you-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .thank-you-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 15px;
+        }
+
+        .thank-you-message {
+            font-size: 16px;
+            color: #5f6368;
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .thank-you-footer {
+            font-size: 13px;
+            color: #9aa0a6;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hidden iframe for form submission (bypasses CORS) -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+    <div class="form-container">
+        <!-- Logo Header -->
+        <div class="header-image">
+            <img src="Lacme-1080x508 - Clear.png" alt="LACME Logo" id="logo-img"
+                onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/77Darius77/csr-questionnaire-FR/main/Lacme-1080x508%20-%20Clear.png';">
+        </div>
+
+        <div class="form-section">
+            <h1 style="font-size: 32px; font-weight: 400;">Questionnaire RSE</h1>
+            <p class="intro-text">
+                La société Lacme SAS est engagée en matière de Responsabilité Sociétale de l'Entreprise depuis
+                2023.<br><br>
+                Afin de mieux vous connaître et de construire ensemble une relation encore plus durable, nous souhaitons
+                que vous nous partagiez vos informations concernant votre niveau de maturité en matière de développement
+                durable.<br><br>
+                Ce questionnaire est à destination des fournisseurs d'achats de Lacme SAS.<br>
+                Il a pour but de connaître le niveau de maturité de nos fournisseurs en matière de Responsabilité
+                Sociétale de l'Entreprise.<br><br>
+                <span class="required-star">* Indique une question obligatoire</span>
+            </p>
+        </div>
+
+        <form id="csrForm">
+
+            <!-- Email -->
+            <div class="form-section">
+                <div class="question-box">
+                    <label class="question-label">1. Adresse e-mail <span class="required-star">*</span></label>
+                    <input type="email" class="form-control" name="email" required placeholder="Votre e-mail">
+                </div>
+            </div>
+
+            <!-- Section 1 -->
+            <div class="form-section">
+                <div class="section-title">Section 1 : Identification et renseignements juridiques de la raison sociale
+                </div>
+                <p>L'objectif du questionnaire est d'actualiser et compléter les informations en notre possession
+                    concernant votre entreprise.</p>
+
+                <div class="question-box">
+                    <label class="question-label">2. Nom de la Société <span class="required-star">*</span></label>
+                    <input type="text" class="form-control" name="company_name" required>
+                </div>
+                <div class="question-box">
+                    <label class="question-label">3. Adresse <span class="required-star">*</span></label>
+                    <input type="text" class="form-control" name="address" required>
+                </div>
+                <div class="question-box">
+                    <label class="question-label">4. SIRET <span class="required-star">*</span></label>
+                    <input type="text" class="form-control" name="siret" required>
+                </div>
+                <div class="question-box">
+                    <label class="question-label">5. Nom et Prénom de la personne remplissant ce formulaire <span
+                            class="required-star">*</span></label>
+                    <input type="text" class="form-control" name="respondent_name" required>
+                </div>
+                <div class="question-box">
+                    <label class="question-label">6. Fonction de la personne remplissant ce formulaire <span
+                            class="required-star">*</span></label>
+                    <input type="text" class="form-control" name="respondent_title" required>
+                </div>
+                <div class="question-box">
+                    <label class="question-label">7. Contact RSE/Environnement/Qualité (si différent) : (Nom, Fonction,
+                        E-mail) <span class="required-star">*</span></label>
+                    <textarea class="form-control" name="csr_contact" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <!-- Section 2: Engagement Général RSE (Branching Logic) -->
+            <div class="form-section">
+                <div class="section-title">Section 2 : Engagement Général en matière de RSE</div>
+
+                <div class="question-box">
+                    <label class="question-label">8. 1 : Votre entreprise est-elle engagée dans une démarche RSE
+                        structurée (ex : politique formalisée, objectifs définis, reporting, actions spécifiques...) ?
+                        <span class="required-star">*</span></label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="structured_csr" id="csr_yes" value="Oui"
+                            required onchange="handleBranching()">
+                        <label class="form-check-label" for="csr_yes">Oui (Passer à la question 9)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="structured_csr" id="csr_no" value="Non"
+                            onchange="handleBranching()">
+                        <label class="form-check-label" for="csr_no">Non (Passer à la question 40)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRANCH A: DÉMARCHE STRUCTURÉE (Q9 - Q39) -->
+            <div id="branch-structured" class="hidden-section">
+                <div class="form-section">
+                    <div class="section-title">Section 3A : Évaluation Détaillée de la Démarche RSE</div>
+                    <p><strong>Gouvernance et Stratégie RSE</strong></p>
+
+                    <div class="question-box">
+                        <label class="question-label">9. 1 : Votre démarche RSE est-elle labellisée ou évaluée par un
+                            tiers extérieur (ex : EcoVadis, ISO 26000, B Corp, Lucie 26000...) ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="csr_labeled"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="csr_labeled"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">10. Si oui, lequel/lesquels et quel est votre score/niveau
+                            actuel ?</label>
+                        <input type="text" class="form-control" name="csr_label_details">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">11. 2 : Votre entreprise est-elle signataire de texte(s)
+                            d'engagement volontaire en matière de RSE (ex : Global Compact des Nations Unies, Charte
+                            sectorielle, Charte de la Diversité...) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="csr_signatory"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="csr_signatory"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">12. Si oui, lequel/lesquels ?</label>
+                        <input type="text" class="form-control" name="csr_signatory_details">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">13. 3 : Existe-t-il au sein de votre direction une personne ou un
+                            service spécifiquement chargé(e) de la RSE ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio"
+                                name="csr_responsible_exists" value="Oui"><label class="form-check-label">Oui</label>
+                        </div>
+                        <div class="form-check"><input class="form-check-input" type="radio"
+                                name="csr_responsible_exists" value="Non"><label class="form-check-label">Non</label>
+                        </div>
+                    </div>
+
+                    <div class="question-box">
+                        <p>Si oui, renseignez les champs suivants :</p>
+                        <label class="question-label">14. Nom et Prénom de la personne</label>
+                        <input type="text" class="form-control" name="csr_resp_name">
+                        <label class="question-label mt-2">15. Intitulé de la Fonction de la personne</label>
+                        <input type="text" class="form-control" name="csr_resp_title">
+                        <label class="question-label mt-2">16. Email de la personne</label>
+                        <input type="email" class="form-control" name="csr_resp_email">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">17. 4 : Votre société publie-t-elle un rapport RSE/développement
+                            durable (ou une section dédiée dans son rapport annuel) ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="csr_report"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="csr_report"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">18. Si oui, pouvez-vous joindre un lien ou le document ?</label>
+                        <input type="text" class="form-control" name="csr_report_link">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">19. 5 : Avez-vous mis en place un code de conduite (éthique ou
+                            RSE) interne ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="code_of_conduct"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="code_of_conduct"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">20. 6 : Disposez-vous d'un système (formalisé ou non) permettant
+                            aux parties prenantes (employés, riverains, etc.) de remonter des préoccupations ou
+                            réclamations d'ordre éthique, social ou environnemental ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="whistleblowing"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="whistleblowing"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <p><strong>Conditions de travail et Droits Humains</strong></p>
+
+                    <div class="question-box">
+                        <label class="question-label">21. 1 : Avez-vous une politique formalisée couvrant les
+                            conditions de travail et les Droits Humains ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="human_rights_policy"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="human_rights_policy"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">22. 2 : Si oui, quels domaines sont couverts (cocher les
+                            applicables) ?</label>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Travail des enfants"><label class="form-check-label">Interdiction du travail des
+                                enfants et protection des jeunes travailleurs</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Salaires décents"><label class="form-check-label">Salaires décents et avantages
+                                sociaux conformes (ou supérieurs) à la loi</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Temps de travail"><label class="form-check-label">Temps de travail conforme (ou
+                                plus favorable) à la loi</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Travail forcé"><label class="form-check-label">Interdiction du travail forcé, de
+                                l'esclavage moderne et de la traite d'êtres humains</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Liberté d'association"><label class="form-check-label">Liberté d'association et
+                                droit à la négociation collective</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Non-discrimination"><label class="form-check-label">Non-discrimination et égalité
+                                des chances</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="hr_areas"
+                                value="Harcèlement"><label class="form-check-label">Prévention du harcèlement</label>
+                        </div>
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">23. Autres (préciser)</label>
+                        <input type="text" class="form-control" name="hr_other">
+                    </div>
+
+                    <p><strong>Santé et Sécurité au Travail</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">24. 1 : Avez-vous une politique formalisée en matière de Santé et
+                            Sécurité au Travail (SST) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ohs_policy"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ohs_policy"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">25. 2 : Menez-vous des actions spécifiques pour la prévention des
+                            risques professionnels (ex : évaluation des risques, formations SST, fourniture d'EPI,
+                            sécurité des machines, plans d'urgence...) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ohs_actions"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ohs_actions"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">26. Si oui, pouvez-vous donner quelques exemples ?</label>
+                        <input type="text" class="form-control" name="ohs_examples">
+                    </div>
+
+                    <p><strong>Éthique des Affaires</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">27. 1 : Avez-vous une politique formalisée en matière d'éthique
+                            des affaires ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ethics_policy"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ethics_policy"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">28. 2 : Si oui, quels domaines sont couverts (cocher les
+                            applicables) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Corruption"><label class="form-check-label">Lutte contre la corruption,
+                                l'extorsion et les pots-de-vin</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Vie privée"><label class="form-check-label">Respect de la vie privée et
+                                protection des données</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Transparence"><label class="form-check-label">Transparence et exactitude de
+                                l'information financière et extra-financière</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Concurrence"><label class="form-check-label">Concurrence loyale</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Conflits d'intérêts"><label class="form-check-label">Gestion des conflits
+                                d'intérêts</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Propriété intellectuelle"><label class="form-check-label">Protection de la
+                                propriété intellectuelle</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Contrefaçon"><label class="form-check-label">Lutte contre la contrefaçon</label>
+                        </div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Export"><label class="form-check-label">Respect des contrôles à l'exportation et
+                                des sanctions économiques</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="ethics_areas"
+                                value="Alerte éthique"><label class="form-check-label">Dispositif d'alerte éthique
+                                (whistleblowing) et protection des lanceurs d'alerte</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">29. Autres (préciser) :</label>
+                        <input type="text" class="form-control" name="ethics_other">
+                    </div>
+
+                    <p><strong>Environnement (Général)</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">30. 1 : Avez-vous une politique environnementale formalisée
+                            incluant un engagement de conformité légale ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_policy"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_policy"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">31. 2 : Avez-vous mis en place un système de management
+                            environnemental (ex : certifié ISO 14001 ou non) ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_system"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_system"
+                                value="Oui certifié"><label class="form-check-label">Oui, certifié</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_system"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">32. 3 : Suivez-vous des indicateurs clés de performance
+                            environnementale (ex : consommation d'énergie, d'eau, production de déchets, émissions de
+                            GES) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_kpi"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_kpi"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">33. Si Oui certifié (Préciser) :</label>
+                        <input type="text" class="form-control" name="env_cert_details">
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">34. 4 : Utilisez-vous des substances soumises à restrictions (ex :
+                            REACH, RoHS) dans vos processus ou produits ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="substances"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="substances"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="substances"
+                                value="Ne sait pas"><label class="form-check-label">Ne sait pas</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">35. 5 : Si oui, disposez-vous de procédures écrites pour gérer
+                            l'utilisation et la déclaration de ces substances ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="substances_proc"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="substances_proc"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <p><strong>Achats Responsables (Votre propre chaîne d'approvisionnement)</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">36. 1 : Avez-vous défini des exigences RSE (sociales,
+                            environnementales, éthiques) pour vos propres fournisseurs ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="supplier_csr"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="supplier_csr"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">37. 2 : Si oui, comment communiquez-vous ces exigences (cocher les
+                            applicables) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="supplier_comm"
+                                value="CGA"><label class="form-check-label">Clauses dans les Conditions Générales
+                                d'Achat</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="supplier_comm"
+                                value="Code"><label class="form-check-label">Code de conduite fournisseurs
+                                spécifique</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="supplier_comm"
+                                value="Questionnaire"><label class="form-check-label">Questionnaire d'évaluation
+                                RSE</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="supplier_comm"
+                                value="Portail"><label class="form-check-label">Via un portail fournisseurs</label>
+                        </div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="supplier_comm"
+                                value="Formation"><label class="form-check-label">Formation / Sensibilisation</label>
+                        </div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="supplier_comm"
+                                value="Aucun"><label class="form-check-label">Aucun moyen spécifique</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">38. Autres (préciser) :</label>
+                        <input type="text" class="form-control" name="supplier_other">
+                    </div>
+
+                    <p><strong>Formation</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">39. 1 : Organisez-vous des sessions de formation ou de
+                            sensibilisation de vos collaborateurs sur les sujets RSE (éthique, environnement, social,
+                            SST...) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="training_sessions"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="training_sessions"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRANCH B: NON STRUCTURÉ (Q40 - Q46) -->
+            <div id="branch-unstructured" class="hidden-section">
+                <div class="form-section">
+                    <div class="section-title">Section 3B : Identification des Pratiques Existantes</div>
+
+                    <div class="question-box">
+                        <label class="question-label">40. 1 : Même si vous n'avez pas de démarche RSE structurée,
+                            existe-t-il dans votre entreprise une personne (même sans titre officiel) qui suit les
+                            questions liées à l'environnement, au social ou à la sécurité ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="informal_person"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="informal_person"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">41. Si oui, pouvez-vous indiquer sa fonction ou son rôle et
+                            Email ?</label>
+                        <input type="text" class="form-control" name="informal_contact_details">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">42. 2 : Suivez-vous certains indicateurs de base, même de façon
+                            informelle (cocher les applicables) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="basic_kpi"
+                                value="Électricité"><label class="form-check-label">Consommation
+                                d'électricité</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="basic_kpi"
+                                value="Gaz"><label class="form-check-label">Consommation gaz</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="basic_kpi"
+                                value="Eau"><label class="form-check-label">Consommation d'eau</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="basic_kpi"
+                                value="Accidents"><label class="form-check-label">Accidents du travail</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="basic_kpi"
+                                value="Aucun"><label class="form-check-label">Aucun</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">43. Autres (préciser) :</label>
+                        <input type="text" class="form-control" name="basic_kpi_other">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">44. 3 : Avez-vous mis en place certaines règles ou procédures
+                            écrites concernant (cocher les applicables) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="written_rules"
+                                value="Sécurité"><label class="form-check-label">La sécurité au travail (ex : port des
+                                EPI, consignes de sécurité machine)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="written_rules"
+                                value="Déchets"><label class="form-check-label">Le tri des déchets (même simple)</label>
+                        </div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="written_rules"
+                                value="Embauche"><label class="form-check-label">Des règles de base de
+                                non-discrimination à l'embauche</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="written_rules"
+                                value="Aucune"><label class="form-check-label">Aucune procédure écrite formelle sur ces
+                                sujets</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">45. Autres (préciser) :</label>
+                        <input type="text" class="form-control" name="written_rules_other">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">46. 4 : Seriez-vous intéressé(e) par des informations ou un
+                            accompagnement de la part de Lacme pour vous aider à initier ou structurer une démarche RSE
+                            ?
+                            <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="support_interest"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="support_interest"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="support_interest"
+                                value="Peut-être"><label class="form-check-label">Peut-être, souhaiterait en discuter
+                                davantage</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIE COMMUNE (Q47 - Fin) -->
+            <div id="common-ending" class="hidden-section">
+                <div class="form-section">
+                    <div class="section-title">Section 4 : Actions Opérationnelles Environnementales et Éco-conception
+                    </div>
+                    <p><strong>Gestion des Déchets</strong></p>
+
+                    <div class="question-box">
+                        <label class="question-label">47. 1 : Mesurez-vous la quantité et la nature des déchets générés
+                            par votre activité ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="waste_measure"
+                                value="Oui détaillé"><label class="form-check-label">Oui, de façon détaillée</label>
+                        </div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="waste_measure"
+                                value="Oui globalement"><label class="form-check-label">Oui, globalement</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="waste_measure"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">48. 2 : Avez-vous mis en place des actions spécifiques pour
+                            réduire vos déchets à la source ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="waste_reduce"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="waste_reduce"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">49. Si Oui, exemples :</label>
+                        <input type="text" class="form-control" name="waste_examples">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">50. 3 : Avez-vous mis en place des filières de tri et de
+                            valorisation (recyclage, réutilisation, compostage, valorisation énergétique) ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="recycling"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="recycling"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">51. Si oui, pour quels types de déchets principaux ?</label>
+                        <input type="text" class="form-control" name="recycling_types">
+                    </div>
+
+                    <p><strong>Gestion des Ressources (Énergie, Eau)</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">52. 1 : Mesurez-vous votre consommation d'énergie (électricité,
+                            gaz, fioul...) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="energy_measure"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="energy_measure"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">53. 2 : Avez-vous mis en place des actions pour réduire votre
+                            consommation d'énergie (ex : isolation, LED, équipements moins énergivores, énergies
+                            renouvelables...) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="energy_reduce"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="energy_reduce"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">54. Si oui, exemples :</label>
+                        <input type="text" class="form-control" name="energy_examples">
+                    </div>
+
+                    <div class="question-box">
+                        <label class="question-label">55. 3 : Mesurez-vous votre consommation d'eau ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="water_measure"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="water_measure"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">56. 4 : Avez-vous mis en place des actions pour réduire votre
+                            consommation d'eau (ex : équipements économes, recyclage de l'eau...) ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="water_reduce"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="water_reduce"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">57. Si oui, exemples :</label>
+                        <input type="text" class="form-control" name="water_examples">
+                    </div>
+
+                    <p><strong>Transport et Émissions de CO2</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">58. 1 : Avez-vous mis en place des actions pour réduire
+                            l'empreinte carbone liée aux transports (marchandises ou collaborateurs) (ex : optimisation
+                            logistique, véhicules moins polluants, plan de mobilité...) ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="transport_actions"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="transport_actions"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">59. Si oui, exemples :</label>
+                        <input type="text" class="form-control" name="transport_examples">
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">60. 2 : Mesurez-vous (ou estimez-vous) les émissions de CO2 liées
+                            aux transports des marchandises que vous nous livrez ? <span
+                                class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="co2_measure"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="co2_measure"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="co2_measure"
+                                value="En projet"><label class="form-check-label">En projet</label></div>
+                    </div>
+
+                    <p><strong>Développement de Produits Éco-responsables (Éco-conception)</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">61. 1 : Votre entreprise a-t-elle une démarche d'éco-conception
+                            pour développer des produits plus respectueux de l'environnement (ex : analyse de cycle de
+                            vie, utilisation de matériaux recyclés/biosourcés, réduction des emballages, amélioration de
+                            la durabilité/réparabilité...) ? <span class="required-star">*</span></label>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ecodesign"
+                                value="Oui"><label class="form-check-label">Oui</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ecodesign"
+                                value="Non"><label class="form-check-label">Non</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="ecodesign"
+                                value="En projet"><label class="form-check-label">En projet</label></div>
+                    </div>
+                    <div class="question-box">
+                        <label class="question-label">62. Si oui, pouvez-vous lister les produits ou gammes de produits
+                            éco-conçus que vous fournissez actuellement et qui pourraient potentiellement répondre à nos
+                            besoins futurs ? <span class="required-star">*</span></label>
+                        <textarea class="form-control" name="ecodesign_products" rows="3"></textarea>
+                    </div>
+
+                    <p><strong>Section 5 : Conclusion</strong></p>
+                    <div class="question-box">
+                        <label class="question-label">63. 1 : Avez-vous des commentaires, suggestions ou informations
+                            complémentaires à nous transmettre concernant votre démarche RSE ou ce questionnaire ? <span
+                                class="required-star">*</span></label>
+                        <textarea class="form-control" name="comments" rows="3"></textarea>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button type="submit" class="btn btn-submit" id="submitButton">Envoyer</button>
+                    </div>
+                    <div id="loadingMessage"
+                        style="display:none; text-align: center; margin-top: 10px; color: #0056b3;">Envoi en cours...
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Thank You Page -->
+    <div class="thank-you-container" id="thankYouPage">
+        <img src="Lacme-1080x508 - Clear.png" alt="LACME Logo"
+            onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/77Darius77/csr-questionnaire-FR/main/Lacme-1080x508%20-%20Clear.png';">
+        <div class="thank-you-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+            </svg>
+        </div>
+        <h1 class="thank-you-title">Merci pour votre participation !</h1>
+        <p class="thank-you-message">
+            Nous vous remercions d'avoir pris le temps de répondre à notre formulaire.<br>
+            Votre contribution est précieuse pour nous aider à améliorer nos pratiques d'achats responsables et à
+            renforcer notre partenariat.<br><br>
+            Votre engagement et votre collaboration sont essentiels pour avancer ensemble vers un avenir plus durable.
+        </p>
+        <p class="thank-you-footer">LACME SAS &mdash; Responsabilité Sociétale de l'Entreprise</p>
+    </div>
+
+    <script>
+        // URL du Web App Google Apps Script
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKliNZOKt6B1pwVr4VitUI2azuffwT66e42TP88cbLdW3u1J6oRLqiqa_iwFlz_PXT/exec';
+
+        function handleBranching() {
+            const yesRadio = document.getElementById('csr_yes');
+            const noRadio = document.getElementById('csr_no');
+
+            const structuredBranch = document.getElementById('branch-structured');
+            const unstructuredBranch = document.getElementById('branch-unstructured');
+            const commonEnding = document.getElementById('common-ending');
+
+            if (yesRadio.checked) {
+                structuredBranch.style.display = 'block';
+                unstructuredBranch.style.display = 'none';
+                commonEnding.style.display = 'block';
+
+                toggleRequired(structuredBranch, true);
+                toggleRequired(unstructuredBranch, false);
+            }
+            else if (noRadio.checked) {
+                structuredBranch.style.display = 'none';
+                unstructuredBranch.style.display = 'block';
+                commonEnding.style.display = 'block';
+
+                toggleRequired(structuredBranch, false);
+                toggleRequired(unstructuredBranch, true);
+            }
+        }
+
+        function toggleRequired(container, isRequired) {
+            const inputs = container.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (isRequired) {
+                    input.disabled = false;
+                } else {
+                    input.disabled = true;
+                }
+            });
+        }
+
+        function showThankYouPage() {
+            document.querySelector('.form-container').style.display = 'none';
+            document.getElementById('thankYouPage').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const form = document.getElementById('csrForm');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            // Si l'URL n'est pas configurée, afficher la page de remerciement directement (test local)
+            if (!SCRIPT_URL || SCRIPT_URL === 'TON_URL_APPS_SCRIPT_ICI') {
+                showThankYouPage();
+                return;
+            }
+
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('loadingMessage').style.display = 'block';
+
+            // Soumission native via iframe caché (contourne le CORS)
+            form.action = SCRIPT_URL;
+            form.method = 'POST';
+            form.target = 'hidden_iframe';
+            form.submit();
+
+            // Afficher la page de remerciement après un court délai
+            setTimeout(() => {
+                showThankYouPage();
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>
