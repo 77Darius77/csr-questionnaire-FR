@@ -192,9 +192,6 @@
 
 <body>
 
-    <!-- Hidden iframe for form submission (bypasses CORS) -->
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
     <div class="form-container">
         <!-- Logo Header -->
         <div class="header-image">
@@ -817,6 +814,11 @@
                     <div id="loadingMessage"
                         style="display:none; text-align: center; margin-top: 10px; color: #0056b3;">Envoi en cours...
                     </div>
+                    <div id="errorMessage"
+                        style="display:none; text-align: center; margin-top: 10px; color: red; font-weight: bold;">
+                        Erreur de connexion. Si vous êtes en Chine, les services Google peuvent être bloqués. Un fichier
+                        CSV contenant vos réponses a été téléchargé. Merci de l'envoyer à qualité-sécurité@lacme.com.
+                    </div>
                 </div>
             </div>
 
@@ -902,16 +904,65 @@
             document.getElementById('submitButton').disabled = true;
             document.getElementById('loadingMessage').style.display = 'block';
 
-            // Soumission native via iframe caché (contourne le CORS)
-            form.action = SCRIPT_URL;
-            form.method = 'POST';
-            form.target = 'hidden_iframe';
-            form.submit();
+            // Masquer les messages d'erreur précédents
+            const errorMsg = document.getElementById('errorMessage');
+            if (errorMsg) errorMsg.style.display = 'none';
 
-            // Afficher la page de remerciement après un court délai
-            setTimeout(() => {
-                showThankYouPage();
-            }, 1500);
+            const formData = new FormData(form);
+
+            // Utilisation de fetch avec 'no-cors' pour envoyer les données au Apps Script
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Nécessaire pour éviter les erreurs CORS avec Google Apps Script
+            })
+                .then(() => {
+                    document.getElementById('loadingMessage').style.display = 'none';
+                    showThankYouPage();
+                })
+                .catch(error => {
+                    // Cette erreur se déclenche si la requête réseau échoue (ex: blocage par le Grand Firewall en Chine)
+                    console.error('Error!', error.message);
+                    document.getElementById('loadingMessage').style.display = 'none';
+                    document.getElementById('submitButton').disabled = false;
+
+                    // Génération du CSV
+                    try {
+                        let dataObj = {};
+                        for (let [key, value] of formData.entries()) {
+                            if (dataObj[key]) {
+                                dataObj[key] += ", " + value;
+                            } else {
+                                dataObj[key] = value;
+                            }
+                        }
+                        let headers = [];
+                        let values = [];
+                        for (let key in dataObj) {
+                            headers.push('"' + key.replace(/"/g, '""') + '"');
+                            values.push('"' + dataObj[key].replace(/"/g, '""') + '"');
+                        }
+                        let csvContent = "\uFEFF" + headers.join(",") + "\n" + values.join(",");
+
+                        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement("a");
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", "CSR_Questionnaire_Answers.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } catch (e) {
+                        console.error("CSV generation failed", e);
+                    }
+
+                    if (errorMsg) {
+                        errorMsg.innerHTML = "Erreur de connexion. Les services Google peuvent être bloqués dans votre région. Un fichier CSV contenant vos réponses vient d'être téléchargé. Merci de l'envoyer en pièce jointe à <a href='mailto:qualité-sécurité@lacme.com?subject=CSR%20Questionnaire%20Responses'>qualité-sécurité@lacme.com</a>.";
+                        errorMsg.style.display = 'block';
+                    } else {
+                        alert("Erreur de connexion. Un fichier CSV a été généré, merci de l'envoyer à qualité-sécurité@lacme.com.");
+                    }
+                });
         });
     </script>
 </body>
